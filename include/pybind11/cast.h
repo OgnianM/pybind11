@@ -752,12 +752,10 @@ struct holder_helper {
 /// for smart-pointer interoperability. Please consider it an implementation
 /// detail that may change in the future, as formal support for smart-pointer
 /// interoperability is added into pybind11.
-template <typename type, typename holder_type, typename SFINAE = void>
+template <typename type, typename holder_type, typename SFINAE = void> requires(std::is_base_of<type_caster_base<type>, type_caster<type>>::value)
 struct copyable_holder_caster : public type_caster_base<type> {
 public:
     using base = type_caster_base<type>;
-    static_assert(std::is_base_of<base, type_caster<type>>::value,
-                  "Holder classes are only supported for custom types");
     using base::base;
     using base::cast;
     using base::typeinfo;
@@ -829,7 +827,7 @@ protected:
 };
 
 /// Specialize for the common std::shared_ptr, so users don't need to
-template <typename T>
+template <typename T> requires(requires(){copyable_holder_caster<T, std::shared_ptr<T>>();})
 class type_caster<std::shared_ptr<T>> : public copyable_holder_caster<T, std::shared_ptr<T>> {};
 
 /// Type caster for holder types like std::unique_ptr.
