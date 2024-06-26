@@ -10,12 +10,12 @@
 #pragma once
 
 #define PYBIND11_VERSION_MAJOR 2
-#define PYBIND11_VERSION_MINOR 13
+#define PYBIND11_VERSION_MINOR 14
 #define PYBIND11_VERSION_PATCH 0.dev1
 
 // Similar to Python's convention: https://docs.python.org/3/c-api/apiabiversion.html
 // Additional convention: 0xD = dev
-#define PYBIND11_VERSION_HEX 0x020D00D1
+#define PYBIND11_VERSION_HEX 0x020E00D1
 
 // Define some generic pybind11 helper macros for warning management.
 //
@@ -272,9 +272,8 @@ PYBIND11_WARNING_DISABLE_MSVC(4505)
 #endif
 
 #include <Python.h>
-// Reminder: WITH_THREAD is always defined if PY_VERSION_HEX >= 0x03070000
-#if PY_VERSION_HEX < 0x03060000
-#    error "PYTHON < 3.6 IS UNSUPPORTED. pybind11 v2.9 was the last to support Python 2 and 3.5."
+#if PY_VERSION_HEX < 0x03070000
+#    error "PYTHON < 3.7 IS UNSUPPORTED. pybind11 v2.12 was the last to support Python 3.6."
 #endif
 #include <frameobject.h>
 #include <pythread.h>
